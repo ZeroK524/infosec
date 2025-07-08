@@ -48,7 +48,6 @@
 			this.pb1.Size = new System.Drawing.Size(298, 229);
 			this.pb1.TabIndex = 0;
 			this.pb1.TabStop = false;
-			this.pb1.Click += new System.EventHandler(this.pictureBox1_Click);
 			// 
 			// pb2
 			// 
@@ -66,6 +65,7 @@
 			this.btn1.TabIndex = 2;
 			this.btn1.Text = "Select Picture";
 			this.btn1.UseVisualStyleBackColor = true;
+			this.btn1.Click += new System.EventHandler(this.btn1_Click);
 			// 
 			// btn2
 			// 
