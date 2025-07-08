@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|c:\\users\\zero\\documents\\cyber_security\\tool\\steganography\\steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|solutionrelative:steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|c:\\users\\zero\\documents\\cyber_security\\tool\\steganography\\steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|solutionrelative:steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|c:\\users\\zero\\documents\\cyber_security\\tool\\steganography\\steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|solutionrelative:steganography\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{18433314-C936-48C7-8D31-A0F03D29E366}|Steganography\\Steganography.csproj|c:\\users\\zero\\documents\\cyber_security\\tool\\steganography\\steganography\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,29 +46,29 @@
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "Steganography\\Form1.Designer.cs",
-              "ToolTip": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.Designer.cs*",
-              "RelativeToolTip": "Steganography\\Form1.Designer.cs*",
-              "ViewState": "AQIAADYAAAAAAAAAAADgv0MAAAA/AAAA",
+              "ToolTip": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.Designer.cs",
+              "RelativeToolTip": "Steganography\\Form1.Designer.cs",
+              "ViewState": "AQIAAJgAAAAAAAAAAADgv6IAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-08T12:31:14.436Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.cs",
               "RelativeDocumentMoniker": "Steganography\\Form1.cs",
               "ToolTip": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.cs*",
               "RelativeToolTip": "Steganography\\Form1.cs*",
-              "ViewState": "AQIAAD4AAAAAAAAAAADwv0sAAAAaAAAA",
+              "ViewState": "AQIAALQAAAAAAAAAAAAAALwAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-08T12:30:51.497Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "C:\\Users\\Zero\\Documents\\Cyber_Security\\Tool\\Steganography\\Steganography\\Form1.cs",
               "RelativeDocumentMoniker": "Steganography\\Form1.cs",
@@ -77,16 +77,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-08T12:30:42.098Z",
               "EditorCaption": " [Design]"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 59,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }

@@ -17,7 +17,7 @@ namespace Steganography
 		{
 			InitializeComponent();
 		}
-
+		// Xử lý nút nhận ảnh vào 
 		private void btn1_Click(object sender, EventArgs e)
 		{
 			// Tạo hộp thoại chọn file
@@ -81,5 +81,133 @@ namespace Steganography
 				}
 			}
 		}
+		// Xử lý nút nhận ảnh có giấu tin vào 
+		private void btn2_Click(object sender, EventArgs e)
+		{
+			// Tạo hộp thoại chọn file
+			OpenFileDialog openFileDialog = new OpenFileDialog();
+
+			// Thiết lập bộ lọc để chỉ chọn các file ảnh
+			openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+			openFileDialog.Title = "Chọn ảnh để hiển thị";
+
+			// Nếu người dùng chọn ảnh và nhấn OK
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				string filePath = openFileDialog.FileName;
+
+				// 1. Kiểm tra size (<= 500MB)
+				FileInfo fi = new FileInfo(filePath);
+				if (fi.Length > 500 * 1024 * 1024) // 500 MB
+				{
+					MessageBox.Show("File quá lớn! Chỉ chấp nhận ảnh ≤ 500MB.");
+					return;
+				}
+
+				// 2. Kiểm tra magic bytes đầu file để xác định định dạng thực
+				byte[] header = new byte[8];
+				using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+				{
+					fs.Read(header, 0, header.Length);
+				}
+
+				// JPEG: FF D8 FF
+				bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
+
+				// PNG: 89 50 4E 47 0D 0A 1A 0A
+				bool isPNG = header[0] == 0x89 && header[1] == 0x50 &&
+							 header[2] == 0x4E && header[3] == 0x47 &&
+							 header[4] == 0x0D && header[5] == 0x0A &&
+							 header[6] == 0x1A && header[7] == 0x0A;
+
+				if (!isJPG && !isPNG)
+				{
+					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .jpg hoặc .png đúng chuẩn.");
+					return;
+				}
+
+				// 3. Load ảnh và kiểm tra kích thước
+				using (Image img = Image.FromFile(filePath))
+				{
+					if (img.Width > 1366 || img.Height > 768)
+					{
+						MessageBox.Show($"Ảnh vượt quá kích thước cho phép (tối đa 1366x768). Ảnh hiện tại: {img.Width}x{img.Height}");
+						return;
+					}
+
+					// Nếu mọi thứ hợp lệ, hiển thị ảnh lên PictureBox
+					if (pb2.Image != null)
+						pb2.Image.Dispose();
+
+					pb2.Image = new Bitmap(img); // Tạo bản sao để tránh bị khóa file
+												 // Thiết lập kiểu hiển thị ảnh trong PictureBox
+					pb2.SizeMode = PictureBoxSizeMode.Zoom; // hoặc StretchImage tùy ý
+				}
+			}
+
+		}
+
+		// Xử lý nhập từ giấu
+		private void txt1_TextChanged(object sender, EventArgs e)
+		{
+			/* ví dụ
+			ảnh 100 x 100 = 10.000 pixel
+			Ẩn LSB mỗi kênh (R, G, B) → 10.000 × 3 = 30.000 bit
+			Tức là chứa được: 30.000 / 8 = 3.750 byte ≈ 3.75 KB
+			=> Tức chứa tối đa 3.75 KB cho từ giấu 
+			*/
+			btn3.Enabled = false;
+			if (pb1.Image == null) return; // Không có ảnh thì không kiểm tra
+			System.Diagnostics.Debug.WriteLine("#####");
+			// Tính độ dài thông điệp (số byte)
+
+			int messageLength = Encoding.UTF8.GetByteCount(txt1.Text.Trim());
+			int messageBits = messageLength * 8;
+			System.Diagnostics.Debug.WriteLine(txt1.Text);
+			System.Diagnostics.Debug.WriteLine(messageLength); // Chữ "a" = 1 byte -> 8 bit để giấu 
+			System.Diagnostics.Debug.WriteLine($"Kích thước bit từ giấu tối đa:{messageBits}");
+			
+			// Lấy kích thước ảnh (từ PictureBox)
+			using (Bitmap bmp = new Bitmap(pb1.Image)) // Clone ảnh để tránh khóa
+			{
+				int width = bmp.Width;
+				int height = bmp.Height;
+				int totalPixels = width * height;
+				int maxBits = totalPixels * 3; // 3 bit/pixel (LSB trên R, G, B)
+				
+				System.Diagnostics.Debug.WriteLine($"Rộng: {width}");
+				System.Diagnostics.Debug.WriteLine($"Cao: {height}");
+				System.Diagnostics.Debug.WriteLine($"Pixel: {totalPixels}");
+				// Đổi màu tức thời
+				if (messageBits <= maxBits)
+				{
+					txt1.BackColor = Color.White;
+					txt1.ForeColor = Color.Green;
+					txt3.Text = messageBits > 0 ? $"Hợp lệ {messageBits} <= {maxBits}!" : "";
+					txt3.ForeColor = Color.Green;
+					btn3.Enabled = messageBits > 0;
+				}
+				else
+				{
+					txt1.BackColor = Color.White;
+					txt1.ForeColor = Color.Red;
+					txt3.Text = $"Kích thước chuỗi: {messageBits} <= Ảnh:{maxBits}!";
+					txt3.ForeColor = Color.Red;
+					btn3.Enabled = false;
+				}
+
+			}
+		}
+
+		// Xử lý nút giấu tin
+		private void btn3_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		
+
+
+
 	}
 }

@@ -36,7 +36,9 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.txt1 = new System.Windows.Forms.TextBox();
 			this.txt2 = new System.Windows.Forms.TextBox();
-			this.button1 = new System.Windows.Forms.Button();
+			this.btn3 = new System.Windows.Forms.Button();
+			this.txt3 = new System.Windows.Forms.TextBox();
+			this.txt4 = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb2)).BeginInit();
 			this.SuspendLayout();
@@ -75,6 +77,7 @@
 			this.btn2.TabIndex = 3;
 			this.btn2.Text = "Select Picture";
 			this.btn2.UseVisualStyleBackColor = true;
+			this.btn2.Click += new System.EventHandler(this.btn2_Click);
 			// 
 			// label1
 			// 
@@ -103,6 +106,7 @@
 			this.txt1.Name = "txt1";
 			this.txt1.Size = new System.Drawing.Size(295, 21);
 			this.txt1.TabIndex = 6;
+			this.txt1.TextChanged += new System.EventHandler(this.txt1_TextChanged);
 			// 
 			// txt2
 			// 
@@ -112,21 +116,40 @@
 			this.txt2.Size = new System.Drawing.Size(295, 21);
 			this.txt2.TabIndex = 7;
 			// 
-			// button1
+			// btn3
 			// 
-			this.button1.Location = new System.Drawing.Point(67, 397);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(107, 23);
-			this.button1.TabIndex = 8;
-			this.button1.Text = "Hide Message";
-			this.button1.UseVisualStyleBackColor = true;
+			this.btn3.Location = new System.Drawing.Point(67, 397);
+			this.btn3.Name = "btn3";
+			this.btn3.Size = new System.Drawing.Size(107, 23);
+			this.btn3.TabIndex = 8;
+			this.btn3.Text = "Hide Message";
+			this.btn3.UseVisualStyleBackColor = true;
+			this.btn3.Click += new System.EventHandler(this.btn3_Click);
+			// 
+			// txt3
+			// 
+			this.txt3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txt3.Location = new System.Drawing.Point(67, 338);
+			this.txt3.Name = "txt3";
+			this.txt3.Size = new System.Drawing.Size(295, 21);
+			this.txt3.TabIndex = 9;
+			// 
+			// txt4
+			// 
+			this.txt4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.txt4.Location = new System.Drawing.Point(414, 338);
+			this.txt4.Name = "txt4";
+			this.txt4.Size = new System.Drawing.Size(295, 21);
+			this.txt4.TabIndex = 10;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.txt4);
+			this.Controls.Add(this.txt3);
+			this.Controls.Add(this.btn3);
 			this.Controls.Add(this.txt2);
 			this.Controls.Add(this.txt1);
 			this.Controls.Add(this.label2);
@@ -154,7 +177,9 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox txt1;
 		private System.Windows.Forms.TextBox txt2;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button btn3;
+		private System.Windows.Forms.TextBox txt3;
+		private System.Windows.Forms.TextBox txt4;
 	}
 }
 
