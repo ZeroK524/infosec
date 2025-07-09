@@ -115,6 +115,7 @@
 			this.txt2.Name = "txt2";
 			this.txt2.Size = new System.Drawing.Size(295, 21);
 			this.txt2.TabIndex = 7;
+			
 			// 
 			// btn3
 			// 

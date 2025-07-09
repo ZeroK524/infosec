@@ -8,15 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Security.Cryptography;
 namespace Steganography
 {
 	public partial class Form1 : Form
 	{
+		
+
+
 		public Form1()
 		{
 			InitializeComponent();
+			btn3.Enabled = false;
 		}
+
 		// Xử lý nút nhận ảnh vào 
 		private void btn1_Click(object sender, EventArgs e)
 		{
@@ -58,7 +63,7 @@ namespace Steganography
 
 				if (!isPNG)
 				{
-					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .jpg hoặc .png đúng chuẩn.");
+					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .png đúng chuẩn.");
 					return;
 				}
 
@@ -122,7 +127,7 @@ namespace Steganography
 
 				if (!isPNG)
 				{
-					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .jpg hoặc .png đúng chuẩn.");
+					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .png đúng chuẩn.");
 					return;
 				}
 
@@ -142,6 +147,20 @@ namespace Steganography
 					pb2.Image = new Bitmap(img); // Tạo bản sao để tránh bị khóa file
 												 // Thiết lập kiểu hiển thị ảnh trong PictureBox
 					pb2.SizeMode = PictureBoxSizeMode.Zoom; // hoặc StretchImage tùy ý
+					System.Diagnostics.Debug.WriteLine($"Đã có ảnh: pb2");
+					if (AnhPNGCoBiChinhSua(pb2) == false)
+					{
+						// Nếu CRC không đúng → ảnh đã chỉnh sửa → tiến hành giải mã
+						string thongDiep = GiaiMaTuAnh(pb2);
+						txt2.Text = thongDiep;
+					}
+					else
+					{
+						// Ảnh gốc không bị chỉnh sửa
+						txt4.Text = "Ảnh không có giấu tin";
+					}
+
+					System.Diagnostics.Debug.WriteLine($"Đã chạy xử lý!");
 				}
 			}
 
@@ -202,7 +221,7 @@ namespace Steganography
 		// Xử lý nút giấu tin
 		private void btn3_Click(object sender, EventArgs e)
 		{
-			string message = txt1.Text.Trim();
+			string message =txt1.Text.Trim() + '\0'; // Dùng như vậy để giải mã dễ dàng 
 			if (string.IsNullOrEmpty(message)) return;
 
 			Bitmap original = new Bitmap(pb1.Image);
@@ -288,5 +307,144 @@ namespace Steganography
 			}
 		}
 
+		// Xử lý giải mã 
+		private string GiaiMaTuAnh(PictureBox pbLSB)
+		{
+			if (pbLSB.Image == null)
+				return string.Empty;
+
+			Bitmap bmp = new Bitmap(pbLSB.Image);
+			int width = bmp.Width;
+			int height = bmp.Height;
+
+			StringBuilder message = new StringBuilder();
+			int bitCount = 0;
+			int currentByte = 0;
+			bool foundEnd = false;
+
+			for (int i = 0; i < height && !foundEnd; i++)
+			{
+				for (int j = 0; j < width && !foundEnd; j++)
+				{
+					Color pixel = bmp.GetPixel(j, i);
+					int[] bitArray = {
+				pixel.R & 1,
+				pixel.G & 1,
+				pixel.B & 1
+			};
+
+					foreach (int bit in bitArray)
+					{
+						currentByte = (currentByte << 1) | bit;
+						bitCount++;
+
+						if (bitCount == 8)
+						{
+							char c = (char)currentByte;
+
+							if (c == '\0')
+							{
+								foundEnd = true;
+								break;
+							}
+
+							message.Append(c);
+							currentByte = 0;
+							bitCount = 0;
+						}
+					}
+				}
+			}
+			System.Diagnostics.Debug.WriteLine(message);
+			return message.ToString();
+		}
+		// Kiểm tra ảnh có LSB hay không
+		private bool AnhPNGCoBiChinhSua(PictureBox pb)
+		{
+			if (pb.Image == null)
+				return false;
+
+			// Lưu ảnh tạm ra stream PNG (giữ nguyên định dạng)
+			using (MemoryStream ms = new MemoryStream())
+			{
+				pb.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+				ms.Position = 0; // quay lại đầu stream
+
+				using (BinaryReader br = new BinaryReader(ms))
+				{
+					// Đọc header PNG
+					byte[] pngHeader = br.ReadBytes(8);
+					byte[] expectedHeader = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+					if (!pngHeader.SequenceEqual(expectedHeader))
+					{
+						MessageBox.Show("Không phải ảnh PNG.");
+						return false;
+					}
+
+					while (br.BaseStream.Position < br.BaseStream.Length)
+					{
+						// Đọc độ dài chunk
+						byte[] lenBytes = br.ReadBytes(4);
+						if (lenBytes.Length < 4) break;
+						Array.Reverse(lenBytes); // PNG dùng big endian
+						int dataLength = BitConverter.ToInt32(lenBytes, 0);
+
+						// Đọc loại chunk
+						byte[] typeBytes = br.ReadBytes(4);
+						if (typeBytes.Length < 4) break;
+
+						// Đọc dữ liệu chunk
+						byte[] dataBytes = br.ReadBytes(dataLength);
+						if (dataBytes.Length < dataLength) break;
+
+						// Đọc CRC đã ghi trong file
+						byte[] crcBytes = br.ReadBytes(4);
+						if (crcBytes.Length < 4) break;
+						uint crcStored = BitConverter.ToUInt32(crcBytes.Reverse().ToArray(), 0);
+
+						// Tính CRC thực tế
+						byte[] toCheck = typeBytes.Concat(dataBytes).ToArray();
+						uint crcCalculated = Crc32(toCheck);
+
+						if (crcStored != crcCalculated)
+						{
+							// Có ít nhất 1 CRC sai → ảnh bị chỉnh sửa
+							return true;
+						}
+
+						// Nếu gặp chunk IEND thì kết thúc
+						string type = System.Text.Encoding.ASCII.GetString(typeBytes);
+						if (type == "IEND") break;
+					}
+				}
+			}
+
+			// CRC của tất cả các chunk đều đúng → ảnh không bị chỉnh sửa
+			return false;
+		}
+
+		//Tính CRC32 chuẩn PNG
+		private static uint Crc32(byte[] data)
+		{
+			const uint poly = 0xEDB88320;
+			uint[] table = new uint[256];
+
+			for (uint i = 0; i < table.Length; i++)
+			{
+				uint crc = i;
+				for (int j = 0; j < 8; j++)
+					crc = (crc & 1) != 0 ? (crc >> 1) ^ poly : crc >> 1;
+				table[i] = crc;
+			}
+
+			uint result = 0xFFFFFFFF;
+			foreach (byte b in data)
+			{
+				byte index = (byte)((result & 0xFF) ^ b);
+				result = (result >> 8) ^ table[index];
+			}
+
+			return ~result;
+		}
 	}
 }
