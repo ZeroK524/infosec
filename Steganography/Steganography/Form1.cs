@@ -24,7 +24,7 @@ namespace Steganography
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 
 			// Thiết lập bộ lọc để chỉ chọn các file ảnh
-			openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+			openFileDialog.Filter = "Image Files|*.png"; //*.jpg;*.jpeg; ko phù hợp cho LSB do bị nén mất dữ liệu bit
 			openFileDialog.Title = "Chọn ảnh để hiển thị";
 
 			// Nếu người dùng chọn ảnh và nhấn OK
@@ -48,7 +48,7 @@ namespace Steganography
 				}
 
 				// JPEG: FF D8 FF
-				bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
+				//bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
 
 				// PNG: 89 50 4E 47 0D 0A 1A 0A
 				bool isPNG = header[0] == 0x89 && header[1] == 0x50 &&
@@ -56,7 +56,7 @@ namespace Steganography
 							 header[4] == 0x0D && header[5] == 0x0A &&
 							 header[6] == 0x1A && header[7] == 0x0A;
 
-				if (!isJPG && !isPNG)
+				if (!isPNG)
 				{
 					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .jpg hoặc .png đúng chuẩn.");
 					return;
@@ -88,7 +88,7 @@ namespace Steganography
 			OpenFileDialog openFileDialog = new OpenFileDialog();
 
 			// Thiết lập bộ lọc để chỉ chọn các file ảnh
-			openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png";
+			openFileDialog.Filter = "Image Files|*.png";
 			openFileDialog.Title = "Chọn ảnh để hiển thị";
 
 			// Nếu người dùng chọn ảnh và nhấn OK
@@ -112,7 +112,7 @@ namespace Steganography
 				}
 
 				// JPEG: FF D8 FF
-				bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
+				//bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
 
 				// PNG: 89 50 4E 47 0D 0A 1A 0A
 				bool isPNG = header[0] == 0x89 && header[1] == 0x50 &&
@@ -120,7 +120,7 @@ namespace Steganography
 							 header[4] == 0x0D && header[5] == 0x0A &&
 							 header[6] == 0x1A && header[7] == 0x0A;
 
-				if (!isJPG && !isPNG)
+				if (!isPNG)
 				{
 					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .jpg hoặc .png đúng chuẩn.");
 					return;
@@ -202,12 +202,91 @@ namespace Steganography
 		// Xử lý nút giấu tin
 		private void btn3_Click(object sender, EventArgs e)
 		{
+			string message = txt1.Text.Trim();
+			if (string.IsNullOrEmpty(message)) return;
+
+			Bitmap original = new Bitmap(pb1.Image);
+			int width = original.Width;
+			int height = original.Height;
+
+			List<int> bitList = new List<int>();
+			foreach (char c in message)
+			{
+				byte b = (byte)c;
+				for (int i = 7; i >= 0; i--)
+				{
+					int bit = (b >> i) & 1;
+					bitList.Add(bit);
+				}
+			}
+
+			int totalBits = bitList.Count;
+			int p = (totalBits - 1) / 3 + 1;
+
+			List<string> beforeList = new List<string>();
+			List<string> afterList = new List<string>();
+
+			int bitIndex = 0;
+			int usedPixel = 0;
+
+			Bitmap stego = new Bitmap(original);
+
+			for (int i = 0; i < height && usedPixel < p; i++)
+			{
+				for (int j = 0; j < width && usedPixel < p; j++)
+				{
+					Color pixel = original.GetPixel(j, i); // từ ảnh gốc
+					int r = pixel.R;
+					int g = pixel.G;
+					int b = pixel.B;
+
+					beforeList.Add($"{usedPixel + 1,2}: {r,3} {g,3} {b,3}");
+
+					// Giấu bit vào ảnh
+					if (bitIndex < totalBits) r = (r & ~1) | bitList[bitIndex++];
+					if (bitIndex < totalBits) g = (g & ~1) | bitList[bitIndex++];
+					if (bitIndex < totalBits) b = (b & ~1) | bitList[bitIndex++];
+
+					stego.SetPixel(j, i, Color.FromArgb(r, g, b));
+					afterList.Add($"{usedPixel + 1,2}: {r,3} {g,3} {b,3}");
+
+					usedPixel++;
+				}
+			}
+
+			// Gộp 2 bên lại
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine($"Số pixel sử dụng: {p}\n");
+			sb.AppendLine("Trước giấu       →     Sau giấu");
+			sb.AppendLine("-----------------     -----------------");
+
+			for (int i = 0; i < p; i++)
+			{
+				sb.AppendLine($"{beforeList[i]}     →     {afterList[i]}");
+			}
+
 			
+			// hiển thị kết quả
+			DialogResult result = MessageBox.Show(sb.ToString(), "So sánh RGB trước và sau khi giấu", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+			// Nếu người dùng nhấn OK → mở hộp thoại lưu
+			if (result == DialogResult.OK)
+			{
+				using (SaveFileDialog saveDialog = new SaveFileDialog())
+				{
+					saveDialog.Title = "Lưu ảnh sau khi đã giấu tin";
+					saveDialog.Filter = "PNG files (*.png)|*.png";
+					saveDialog.DefaultExt = "png";
+					saveDialog.FileName = "LSB.png";
+
+					if (saveDialog.ShowDialog() == DialogResult.OK)
+					{
+						stego.Save(saveDialog.FileName);
+						MessageBox.Show("Đã lưu ảnh thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					}
+				}
+			}
 		}
-
-		
-
-
 
 	}
 }
