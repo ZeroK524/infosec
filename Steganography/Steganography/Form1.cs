@@ -89,48 +89,36 @@ namespace Steganography
 		// Xử lý nút nhận ảnh có giấu tin vào 
 		private void btn2_Click(object sender, EventArgs e)
 		{
-			// Tạo hộp thoại chọn file
 			OpenFileDialog openFileDialog = new OpenFileDialog();
-
-			// Thiết lập bộ lọc để chỉ chọn các file ảnh
 			openFileDialog.Filter = "Image Files|*.png";
 			openFileDialog.Title = "Chọn ảnh để hiển thị";
 
-			// Nếu người dùng chọn ảnh và nhấn OK
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				string filePath = openFileDialog.FileName;
 
-				// 1. Kiểm tra size (<= 500MB)
 				FileInfo fi = new FileInfo(filePath);
-				if (fi.Length > 500 * 1024 * 1024) // 500 MB
+				if (fi.Length > 500 * 1024 * 1024)
 				{
 					MessageBox.Show("File quá lớn! Chỉ chấp nhận ảnh ≤ 500MB.");
 					return;
 				}
 
-				// 2. Kiểm tra magic bytes đầu file để xác định định dạng thực
+				// Kiểm tra magic bytes
 				byte[] header = new byte[8];
 				using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
 				{
 					fs.Read(header, 0, header.Length);
 				}
-
-				// JPEG: FF D8 FF
-				//bool isJPG = header[0] == 0xFF && header[1] == 0xD8 && header[2] == 0xFF;
-
-				// PNG: 89 50 4E 47 0D 0A 1A 0A
 				bool isPNG = header[0] == 0x89 && header[1] == 0x50 &&
 							 header[2] == 0x4E && header[3] == 0x47 &&
 							 header[4] == 0x0D && header[5] == 0x0A &&
 							 header[6] == 0x1A && header[7] == 0x0A;
-
 				if (!isPNG)
 				{
 					MessageBox.Show("File không hợp lệ. Chỉ chấp nhận ảnh .png đúng chuẩn.");
 					return;
 				}
-
 				// 3. Load ảnh và kiểm tra kích thước
 				using (Image img = Image.FromFile(filePath))
 				{
@@ -147,24 +135,21 @@ namespace Steganography
 					pb2.Image = new Bitmap(img); // Tạo bản sao để tránh bị khóa file
 												 // Thiết lập kiểu hiển thị ảnh trong PictureBox
 					pb2.SizeMode = PictureBoxSizeMode.Zoom; // hoặc StretchImage tùy ý
-					System.Diagnostics.Debug.WriteLine($"Đã có ảnh: pb2");
-					if (AnhPNGCoBiChinhSua(pb2) == false)
-					{
-						// Nếu CRC không đúng → ảnh đã chỉnh sửa → tiến hành giải mã
-						string thongDiep = GiaiMaTuAnh(pb2);
-						txt2.Text = thongDiep;
-					}
-					else
-					{
-						// Ảnh gốc không bị chỉnh sửa
-						txt4.Text = "Ảnh không có giấu tin";
-					}
-
-					System.Diagnostics.Debug.WriteLine($"Đã chạy xử lý!");
+				}
+				// Kiểm tra CRC 
+				if (CoTheCoTinGiau(filePath))
+				{
+					string thongDiep = GiaiMaTuAnh(pb2);
+					txt2.Text = thongDiep;
+				}
+				else
+				{
+					txt2.Text = null;
+					txt4.Text = "Ảnh không có giấu tin";
 				}
 			}
-
 		}
+
 
 		// Xử lý nhập từ giấu
 		private void txt1_TextChanged(object sender, EventArgs e)
@@ -293,18 +278,27 @@ namespace Steganography
 			{
 				using (SaveFileDialog saveDialog = new SaveFileDialog())
 				{
-					saveDialog.Title = "Lưu ảnh sau khi đã giấu tin";
+					saveDialog.Title = "Lưu ảnh sau khi đã giấu tin (không re-encode)";
 					saveDialog.Filter = "PNG files (*.png)|*.png";
 					saveDialog.DefaultExt = "png";
 					saveDialog.FileName = "LSB.png";
 
 					if (saveDialog.ShowDialog() == DialogResult.OK)
 					{
-						stego.Save(saveDialog.FileName);
-						MessageBox.Show("Đã lưu ảnh thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						using (MemoryStream ms = new MemoryStream())
+						{
+							//tego.Save(saveDialog.FileName); sẽ re-encode lại ảnh, làm mất dấu CRC cũ hoặc sắp xếp lại chunk.
+
+							// Lưu ra memory stream để giữ đúng định dạng PNG thô
+							stego.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+							File.WriteAllBytes(saveDialog.FileName, ms.ToArray());
+						}
+
+						MessageBox.Show("Đã lưu ảnh thành công (không re-encode)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					}
 				}
 			}
+
 		}
 
 		// Xử lý giải mã 
@@ -355,96 +349,62 @@ namespace Steganography
 					}
 				}
 			}
+			if (!foundEnd)
+			{
+				return "Không thể giải mã"; // Không tìm thấy ký tự \0
+			}
 			System.Diagnostics.Debug.WriteLine(message);
 			return message.ToString();
 		}
 		// Kiểm tra ảnh có LSB hay không
-		private bool AnhPNGCoBiChinhSua(PictureBox pb)
+		private bool CoTheCoTinGiau(string filePath)
 		{
-			if (pb.Image == null)
-				return false;
+			Bitmap bmp = new Bitmap(filePath);
+			int width = bmp.Width;
+			int height = bmp.Height;
 
-			// Lưu ảnh tạm ra stream PNG (giữ nguyên định dạng)
-			using (MemoryStream ms = new MemoryStream())
+			int bitCount = 0;
+			int currentByte = 0;
+			List<char> chars = new List<char>();
+
+			for (int y = 0; y < height; y++)
 			{
-				pb.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-				ms.Position = 0; // quay lại đầu stream
-
-				using (BinaryReader br = new BinaryReader(ms))
+				for (int x = 0; x < width; x++)
 				{
-					// Đọc header PNG
-					byte[] pngHeader = br.ReadBytes(8);
-					byte[] expectedHeader = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
-					if (!pngHeader.SequenceEqual(expectedHeader))
+					Color pixel = bmp.GetPixel(x, y);
+					int[] bits = {
+				pixel.R & 1,
+				pixel.G & 1,
+				pixel.B & 1
+			};
+
+					foreach (int bit in bits)
 					{
-						MessageBox.Show("Không phải ảnh PNG.");
-						return false;
-					}
+						currentByte = (currentByte << 1) | bit;
+						bitCount++;
 
-					while (br.BaseStream.Position < br.BaseStream.Length)
-					{
-						// Đọc độ dài chunk
-						byte[] lenBytes = br.ReadBytes(4);
-						if (lenBytes.Length < 4) break;
-						Array.Reverse(lenBytes); // PNG dùng big endian
-						int dataLength = BitConverter.ToInt32(lenBytes, 0);
-
-						// Đọc loại chunk
-						byte[] typeBytes = br.ReadBytes(4);
-						if (typeBytes.Length < 4) break;
-
-						// Đọc dữ liệu chunk
-						byte[] dataBytes = br.ReadBytes(dataLength);
-						if (dataBytes.Length < dataLength) break;
-
-						// Đọc CRC đã ghi trong file
-						byte[] crcBytes = br.ReadBytes(4);
-						if (crcBytes.Length < 4) break;
-						uint crcStored = BitConverter.ToUInt32(crcBytes.Reverse().ToArray(), 0);
-
-						// Tính CRC thực tế
-						byte[] toCheck = typeBytes.Concat(dataBytes).ToArray();
-						uint crcCalculated = Crc32(toCheck);
-
-						if (crcStored != crcCalculated)
+						if (bitCount == 8)
 						{
-							// Có ít nhất 1 CRC sai → ảnh bị chỉnh sửa
-							return true;
-						}
+							char c = (char)currentByte;
 
-						// Nếu gặp chunk IEND thì kết thúc
-						string type = System.Text.Encoding.ASCII.GetString(typeBytes);
-						if (type == "IEND") break;
+							if (!char.IsLetterOrDigit(c) && !char.IsPunctuation(c) && !char.IsWhiteSpace(c))
+							{
+								// Nếu xuất hiện ký tự không in được → có thể không phải ASCII → thoát
+								return false;
+							}
+
+							chars.Add(c);
+							if (chars.Count >= 4) // thấy khoảng vài ký tự ASCII đầu là đáng nghi
+								return true;
+
+							bitCount = 0;
+							currentByte = 0;
+						}
 					}
 				}
 			}
 
-			// CRC của tất cả các chunk đều đúng → ảnh không bị chỉnh sửa
 			return false;
-		}
-
-		//Tính CRC32 chuẩn PNG
-		private static uint Crc32(byte[] data)
-		{
-			const uint poly = 0xEDB88320;
-			uint[] table = new uint[256];
-
-			for (uint i = 0; i < table.Length; i++)
-			{
-				uint crc = i;
-				for (int j = 0; j < 8; j++)
-					crc = (crc & 1) != 0 ? (crc >> 1) ^ poly : crc >> 1;
-				table[i] = crc;
-			}
-
-			uint result = 0xFFFFFFFF;
-			foreach (byte b in data)
-			{
-				byte index = (byte)((result & 0xFF) ^ b);
-				result = (result >> 8) ^ table[index];
-			}
-
-			return ~result;
 		}
 	}
 }
