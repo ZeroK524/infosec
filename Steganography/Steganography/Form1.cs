@@ -13,13 +13,13 @@ namespace Steganography
 {
 	public partial class Form1 : Form
 	{
-		
 
-
+		string flag = "CTF{";
 		public Form1()
 		{
 			InitializeComponent();
 			btn3.Enabled = false;
+			
 		}
 
 		// Xử lý nút nhận ảnh vào 
@@ -141,6 +141,7 @@ namespace Steganography
 				{
 					string thongDiep = GiaiMaTuAnh(pb2);
 					txt2.Text = thongDiep;
+					txt4.Text = null;
 				}
 				else
 				{
@@ -206,7 +207,7 @@ namespace Steganography
 		// Xử lý nút giấu tin
 		private void btn3_Click(object sender, EventArgs e)
 		{
-			string message =txt1.Text.Trim() + '\0'; // Dùng như vậy để giải mã dễ dàng 
+			string message = flag + txt1.Text.Trim() + '}'; // Dùng như vậy để giải mã dễ dàng 
 			if (string.IsNullOrEmpty(message)) return;
 
 			Bitmap original = new Bitmap(pb1.Image);
@@ -294,7 +295,7 @@ namespace Steganography
 							File.WriteAllBytes(saveDialog.FileName, ms.ToArray());
 						}
 
-						MessageBox.Show("Đã lưu ảnh thành công (không re-encode)!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+						MessageBox.Show("Đã lưu ảnh thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 					}
 				}
 			}
@@ -336,12 +337,19 @@ namespace Steganography
 						{
 							char c = (char)currentByte;
 
-							if (c == '\0')
+							if (c == '}')
 							{
-								foundEnd = true;
-								break;
+								string result = message.ToString();
+								if (result.Contains("CTF{"))
+								{
+									string ctf = result.Replace("CTF{", "");
+									return ctf; // Có chứa thông điệp CTF
+								}
+									
+								else
+									return "Không thể giải mã";
 							}
-
+							
 							message.Append(c);
 							currentByte = 0;
 							bitCount = 0;
@@ -349,12 +357,10 @@ namespace Steganography
 					}
 				}
 			}
-			if (!foundEnd)
-			{
-				return "Không thể giải mã"; // Không tìm thấy ký tự \0
-			}
 			System.Diagnostics.Debug.WriteLine(message);
-			return message.ToString();
+			return "Không thể giải mã";
+			
+			
 		}
 		// Kiểm tra ảnh có LSB hay không
 		private bool CoTheCoTinGiau(string filePath)
