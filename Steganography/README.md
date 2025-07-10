@@ -21,9 +21,6 @@
 
 - Ứng dụng có thể kiểm tra ảnh PNG **có bị chỉnh sửa hay không** bằng cách phân tích cấu trúc nội dung ảnh.
 - **Cơ chế kiểm tra**:
-  - Duyệt qua từng chunk trong file PNG.
-  - Tính toán lại CRC (Checksum) của chunk.
-  - Nếu **CRC sai lệch** so với CRC gốc → ảnh đã bị chỉnh sửa → có thể chứa thông tin ẩn.
   - Công cụ hoạt động tương tự với các công cụ forensic như `zsteg`.
 
 ---
@@ -55,7 +52,7 @@ Giao diện chia làm **hai phần chính**:
 
 2. **Tự động kiểm tra**:
    - Nếu ảnh **không bị chỉnh sửa** → in ra: `"Ảnh không có giấu tin"`.
-   - Nếu ảnh bị sửa (CRC sai) → thực hiện giải mã LSB.
+
 
 3. **Kết quả**:
    - Nội dung ẩn sẽ hiển thị tại khung văn bản `txt2`.
