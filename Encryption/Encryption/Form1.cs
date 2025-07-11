@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Encryption.Logic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -53,32 +54,13 @@ namespace Encryption
 
 			for (int k = 1; k <= 25; k++)
 			{
-				string encrypted = CaesarEncrypt(input, k);
+				string encrypted = CaesarCipher.Encrypt(input, k);
 				output.AppendLine($"Khóa {k}: {encrypted}");
 			}
 
 			MessageBox.Show(output.ToString(), "Mã hóa Caesar từ khóa 1 đến 25");
 		}
-		private string CaesarEncrypt(string text, int key)
-		{
-			StringBuilder result = new StringBuilder();
 
-			foreach (char ch in text)
-			{
-				if (char.IsLetter(ch))
-				{
-					char baseChar = char.IsUpper(ch) ? 'A' : 'a';
-					char encryptedChar = (char)((((ch - baseChar) + key) % 26) + baseChar);
-					result.Append(encryptedChar);
-				}
-				else
-				{
-					result.Append(ch); // Giữ nguyên các ký tự không phải chữ
-				}
-			}
-
-			return result.ToString();
-		}
 		private void GiaiMaCaesar()
 		{
 			string input = rtb1.Text;
@@ -86,32 +68,11 @@ namespace Encryption
 
 			for (int k = 1; k <= 25; k++)
 			{
-				string decrypted = CaesarDecrypt(input, k);
+				string decrypted = CaesarCipher.Decrypt(input, k);
 				output.AppendLine($"Khóa {k}: {decrypted}");
 			}
 
 			MessageBox.Show(output.ToString(), "Giải mã Caesar từ khóa 1 đến 25");
-		}
-
-		private string CaesarDecrypt(string text, int key)
-		{
-			StringBuilder result = new StringBuilder();
-
-			foreach (char ch in text)
-			{
-				if (char.IsLetter(ch))
-				{
-					char baseChar = char.IsUpper(ch) ? 'A' : 'a';
-					char decryptedChar = (char)((((ch - baseChar - key + 26) % 26) + baseChar));
-					result.Append(decryptedChar);
-				}
-				else
-				{
-					result.Append(ch); // Giữ nguyên ký tự không phải chữ cái
-				}
-			}
-
-			return result.ToString();
 		}
 
 	}
