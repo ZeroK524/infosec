@@ -19,6 +19,9 @@ namespace Encryption
 			
 			// 
 			rbtn2.Checked = true;
+			//
+			chose.Items.AddRange(new string[] { "Caesar", "RSA" });
+			chose.SelectedIndex = 0; // Mặc định chọn "Caesar"
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -62,5 +65,9 @@ namespace Encryption
 			}
 		}
 
+		private void chose_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			
+		}
 	}
 }

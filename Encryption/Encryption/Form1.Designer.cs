@@ -38,6 +38,8 @@
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.label3 = new System.Windows.Forms.Label();
+			this.chose = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -53,7 +55,8 @@
 			// 
 			// rtb1
 			// 
-			this.rtb1.Location = new System.Drawing.Point(56, 39);
+			this.rtb1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rtb1.Location = new System.Drawing.Point(56, 53);
 			this.rtb1.Name = "rtb1";
 			this.rtb1.Size = new System.Drawing.Size(509, 57);
 			this.rtb1.TabIndex = 1;
@@ -72,7 +75,7 @@
 			// rbtn1
 			// 
 			this.rbtn1.AutoSize = true;
-			this.rbtn1.Location = new System.Drawing.Point(571, 66);
+			this.rbtn1.Location = new System.Drawing.Point(571, 84);
 			this.rbtn1.Name = "rbtn1";
 			this.rbtn1.Size = new System.Drawing.Size(75, 17);
 			this.rbtn1.TabIndex = 7;
@@ -83,7 +86,7 @@
 			// rbtn2
 			// 
 			this.rbtn2.AutoSize = true;
-			this.rbtn2.Location = new System.Drawing.Point(571, 43);
+			this.rbtn2.Location = new System.Drawing.Point(571, 61);
 			this.rbtn2.Name = "rbtn2";
 			this.rbtn2.Size = new System.Drawing.Size(63, 17);
 			this.rbtn2.TabIndex = 8;
@@ -94,7 +97,7 @@
 			// button1
 			// 
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(672, 43);
+			this.button1.Location = new System.Drawing.Point(681, 57);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(96, 46);
 			this.button1.TabIndex = 9;
@@ -138,12 +141,33 @@
 			this.col2.HeaderText = "Result";
 			this.col2.Name = "col2";
 			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(149, 22);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(63, 20);
+			this.label3.TabIndex = 11;
+			this.label3.Text = "Chose :";
+			// 
+			// chose
+			// 
+			this.chose.FormattingEnabled = true;
+			this.chose.Location = new System.Drawing.Point(231, 21);
+			this.chose.Name = "chose";
+			this.chose.Size = new System.Drawing.Size(239, 21);
+			this.chose.TabIndex = 12;
+			this.chose.SelectedIndexChanged += new System.EventHandler(this.chose_SelectedIndexChanged);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.chose);
+			this.Controls.Add(this.label3);
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.rbtn2);
@@ -170,6 +194,8 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn col1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn col2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.ComboBox chose;
 	}
 }
 
