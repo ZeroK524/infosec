@@ -16,20 +16,7 @@ namespace Encryption
 		public Form1()
 		{
 			InitializeComponent();
-			// Đảm bảo có đúng 2 cột
-			dataGridView1.ColumnCount = 2;
-			dataGridView1.Columns[0].Name = "col1";
-			dataGridView1.Columns[1].Name = "col2";
-
-			// Thêm các dòng
-			dataGridView1.Rows.Add("pass", "12345");
-			dataGridView1.Rows.Add("base64", "67891");
-			dataGridView1.Rows.Add("RSA", "abcsd");
-			dataGridView1.Rows.Add("Hoho", "hahha");
-			// Tự động giãn ra cho vừa DataGridView
-			dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-			dataGridView1.Columns[0].FillWeight = 10;  // Cột 1
-			dataGridView1.Columns[1].FillWeight = 90;  // Cột 2
+			
 			// 
 			rbtn2.Checked = true;
 		}
@@ -38,11 +25,13 @@ namespace Encryption
 		{
 			if (rbtn2.Checked)
 			{
+				dataGridView1.Rows.Clear();
 				MaHoaCaesar();
 			}
 			
 			else
 			{
+				dataGridView1.Rows.Clear();
 				GiaiMaCaesar();
 			}
 
@@ -55,10 +44,9 @@ namespace Encryption
 			for (int k = 1; k <= 25; k++)
 			{
 				string encrypted = CaesarCipher.Encrypt(input, k);
-				output.AppendLine($"Khóa {k}: {encrypted}");
+				
+				dataGridView1.Rows.Add($"Khóa k = {k}", encrypted);
 			}
-
-			MessageBox.Show(output.ToString(), "Mã hóa Caesar từ khóa 1 đến 25");
 		}
 
 		private void GiaiMaCaesar()
@@ -69,10 +57,9 @@ namespace Encryption
 			for (int k = 1; k <= 25; k++)
 			{
 				string decrypted = CaesarCipher.Decrypt(input, k);
-				output.AppendLine($"Khóa {k}: {decrypted}");
+				
+				dataGridView1.Rows.Add($"Khóa k = {k}", decrypted);
 			}
-
-			MessageBox.Show(output.ToString(), "Giải mã Caesar từ khóa 1 đến 25");
 		}
 
 	}
