@@ -29,6 +29,89 @@ namespace Encryption
 			dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 			dataGridView1.Columns[0].FillWeight = 10;  // Cột 1
 			dataGridView1.Columns[1].FillWeight = 90;  // Cột 2
+			// 
+			rbtn2.Checked = true;
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			if (rbtn2.Checked)
+			{
+				MaHoaCaesar();
+			}
+			
+			else
+			{
+				GiaiMaCaesar();
+			}
+
+		}
+		private void MaHoaCaesar()
+		{
+			string input = rtb1.Text;
+			StringBuilder output = new StringBuilder();
+
+			for (int k = 1; k <= 25; k++)
+			{
+				string encrypted = CaesarEncrypt(input, k);
+				output.AppendLine($"Khóa {k}: {encrypted}");
+			}
+
+			MessageBox.Show(output.ToString(), "Mã hóa Caesar từ khóa 1 đến 25");
+		}
+		private string CaesarEncrypt(string text, int key)
+		{
+			StringBuilder result = new StringBuilder();
+
+			foreach (char ch in text)
+			{
+				if (char.IsLetter(ch))
+				{
+					char baseChar = char.IsUpper(ch) ? 'A' : 'a';
+					char encryptedChar = (char)((((ch - baseChar) + key) % 26) + baseChar);
+					result.Append(encryptedChar);
+				}
+				else
+				{
+					result.Append(ch); // Giữ nguyên các ký tự không phải chữ
+				}
+			}
+
+			return result.ToString();
+		}
+		private void GiaiMaCaesar()
+		{
+			string input = rtb1.Text;
+			StringBuilder output = new StringBuilder();
+
+			for (int k = 1; k <= 25; k++)
+			{
+				string decrypted = CaesarDecrypt(input, k);
+				output.AppendLine($"Khóa {k}: {decrypted}");
+			}
+
+			MessageBox.Show(output.ToString(), "Giải mã Caesar từ khóa 1 đến 25");
+		}
+
+		private string CaesarDecrypt(string text, int key)
+		{
+			StringBuilder result = new StringBuilder();
+
+			foreach (char ch in text)
+			{
+				if (char.IsLetter(ch))
+				{
+					char baseChar = char.IsUpper(ch) ? 'A' : 'a';
+					char decryptedChar = (char)((((ch - baseChar - key + 26) % 26) + baseChar));
+					result.Append(decryptedChar);
+				}
+				else
+				{
+					result.Append(ch); // Giữ nguyên ký tự không phải chữ cái
+				}
+			}
+
+			return result.ToString();
 		}
 
 	}
