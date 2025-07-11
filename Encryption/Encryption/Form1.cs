@@ -26,17 +26,33 @@ namespace Encryption
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			if (rbtn2.Checked)
+			switch (chose.SelectedIndex)
 			{
-				dataGridView1.Rows.Clear();
-				MaHoaCaesar();
+				case 0: // Caesar
+					if (rbtn2.Checked)
+					{
+						dataGridView1.Rows.Clear();
+						MaHoaCaesar();
+					}
+
+					else
+					{
+						dataGridView1.Rows.Clear();
+						GiaiMaCaesar();
+					}
+					break;
+
+				case 1: // RSA
+					MessageBox.Show("Bạn đã chọn RSA");
+					
+					break;
+
+				default:
+					MessageBox.Show("Vui lòng chọn một thuật toán.");
+					break;
 			}
+
 			
-			else
-			{
-				dataGridView1.Rows.Clear();
-				GiaiMaCaesar();
-			}
 
 		}
 		private void MaHoaCaesar()
