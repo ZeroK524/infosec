@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,6 +90,52 @@ namespace Encryption
 		private void btn4_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+		// Save
+		private void btn2_Click(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "CSV file (*.csv)|*.csv";
+			sfd.Title = "Lưu file CSV";
+
+			if (sfd.ShowDialog() == DialogResult.OK)
+			{
+				try
+				{
+					using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
+					{
+						// Ghi tên cột
+						for (int i = 0; i < dataGridView1.Columns.Count; i++)
+						{
+							sw.Write(dataGridView1.Columns[i].HeaderText);
+							if (i < dataGridView1.Columns.Count - 1)
+								sw.Write("\t");
+						}
+						sw.WriteLine();
+
+						// Ghi từng dòng dữ liệu
+						foreach (DataGridViewRow row in dataGridView1.Rows)
+						{
+							if (!row.IsNewRow)
+							{
+								for (int i = 0; i < dataGridView1.Columns.Count; i++)
+								{
+									sw.Write(row.Cells[i].Value?.ToString());
+									if (i < dataGridView1.Columns.Count - 1)
+										sw.Write("\t");
+								}
+								sw.WriteLine();
+							}
+						}
+					}
+
+					MessageBox.Show("Đã lưu thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Lỗi khi lưu file: " + ex.Message);
+				}
+			}
 		}
 		//
 	}
