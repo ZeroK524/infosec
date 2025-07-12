@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.label1 = new System.Windows.Forms.Label();
 			this.rtb1 = new System.Windows.Forms.RichTextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -103,13 +103,14 @@
 			// 
 			// button1
 			// 
+			this.button1.BackColor = System.Drawing.Color.DeepSkyBlue;
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.button1.Location = new System.Drawing.Point(681, 57);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(96, 46);
 			this.button1.TabIndex = 9;
 			this.button1.Text = "Run";
-			this.button1.UseVisualStyleBackColor = true;
+			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// dataGridView1
@@ -117,14 +118,14 @@
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.col1,
@@ -186,31 +187,34 @@
 			// 
 			// btn2
 			// 
+			this.btn2.BackColor = System.Drawing.Color.Yellow;
 			this.btn2.Location = new System.Drawing.Point(56, 415);
 			this.btn2.Name = "btn2";
-			this.btn2.Size = new System.Drawing.Size(75, 23);
+			this.btn2.Size = new System.Drawing.Size(74, 32);
 			this.btn2.TabIndex = 15;
 			this.btn2.Text = "Save";
-			this.btn2.UseVisualStyleBackColor = true;
+			this.btn2.UseVisualStyleBackColor = false;
 			this.btn2.Click += new System.EventHandler(this.btn2_Click);
 			// 
 			// btn3
 			// 
-			this.btn3.Location = new System.Drawing.Point(148, 415);
+			this.btn3.BackColor = System.Drawing.SystemColors.MenuHighlight;
+			this.btn3.Location = new System.Drawing.Point(136, 415);
 			this.btn3.Name = "btn3";
-			this.btn3.Size = new System.Drawing.Size(75, 23);
+			this.btn3.Size = new System.Drawing.Size(70, 32);
 			this.btn3.TabIndex = 16;
 			this.btn3.Text = "Open";
-			this.btn3.UseVisualStyleBackColor = true;
+			this.btn3.UseVisualStyleBackColor = false;
 			// 
 			// btn4
 			// 
+			this.btn4.BackColor = System.Drawing.Color.Red;
 			this.btn4.Location = new System.Drawing.Point(713, 415);
 			this.btn4.Name = "btn4";
-			this.btn4.Size = new System.Drawing.Size(75, 23);
+			this.btn4.Size = new System.Drawing.Size(75, 32);
 			this.btn4.TabIndex = 17;
 			this.btn4.Text = "Exit";
-			this.btn4.UseVisualStyleBackColor = true;
+			this.btn4.UseVisualStyleBackColor = false;
 			this.btn4.Click += new System.EventHandler(this.btn4_Click);
 			// 
 			// label5
