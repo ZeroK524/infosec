@@ -85,5 +85,11 @@ namespace Encryption
 		{
 			
 		}
+		// Btn Exit
+		private void btn4_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
+		//
 	}
 }
