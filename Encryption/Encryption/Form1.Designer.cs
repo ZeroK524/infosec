@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.label1 = new System.Windows.Forms.Label();
 			this.rtb1 = new System.Windows.Forms.RichTextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -40,6 +40,13 @@
 			this.col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label3 = new System.Windows.Forms.Label();
 			this.chose = new System.Windows.Forms.ComboBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.txt1 = new System.Windows.Forms.TextBox();
+			this.btn2 = new System.Windows.Forms.Button();
+			this.btn3 = new System.Windows.Forms.Button();
+			this.btn4 = new System.Windows.Forms.Button();
+			this.label5 = new System.Windows.Forms.Label();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -110,14 +117,14 @@
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.col1,
@@ -126,7 +133,7 @@
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.ShowCellErrors = false;
-			this.dataGridView1.Size = new System.Drawing.Size(732, 322);
+			this.dataGridView1.Size = new System.Drawing.Size(732, 291);
 			this.dataGridView1.TabIndex = 10;
 			// 
 			// col1
@@ -145,7 +152,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(149, 22);
+			this.label3.Location = new System.Drawing.Point(12, 19);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(63, 20);
 			this.label3.TabIndex = 11;
@@ -154,11 +161,73 @@
 			// chose
 			// 
 			this.chose.FormattingEnabled = true;
-			this.chose.Location = new System.Drawing.Point(231, 21);
+			this.chose.Location = new System.Drawing.Point(81, 18);
 			this.chose.Name = "chose";
-			this.chose.Size = new System.Drawing.Size(239, 21);
+			this.chose.Size = new System.Drawing.Size(115, 21);
 			this.chose.TabIndex = 12;
 			this.chose.SelectedIndexChanged += new System.EventHandler(this.chose_SelectedIndexChanged);
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label4.Location = new System.Drawing.Point(447, 19);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(29, 20);
+			this.label4.TabIndex = 13;
+			this.label4.Text = "IV:";
+			// 
+			// txt1
+			// 
+			this.txt1.Location = new System.Drawing.Point(492, 18);
+			this.txt1.Name = "txt1";
+			this.txt1.Size = new System.Drawing.Size(285, 20);
+			this.txt1.TabIndex = 14;
+			// 
+			// btn2
+			// 
+			this.btn2.Location = new System.Drawing.Point(56, 415);
+			this.btn2.Name = "btn2";
+			this.btn2.Size = new System.Drawing.Size(75, 23);
+			this.btn2.TabIndex = 15;
+			this.btn2.Text = "Save";
+			this.btn2.UseVisualStyleBackColor = true;
+			// 
+			// btn3
+			// 
+			this.btn3.Location = new System.Drawing.Point(148, 415);
+			this.btn3.Name = "btn3";
+			this.btn3.Size = new System.Drawing.Size(75, 23);
+			this.btn3.TabIndex = 16;
+			this.btn3.Text = "Open";
+			this.btn3.UseVisualStyleBackColor = true;
+			// 
+			// btn4
+			// 
+			this.btn4.Location = new System.Drawing.Point(713, 415);
+			this.btn4.Name = "btn4";
+			this.btn4.Size = new System.Drawing.Size(75, 23);
+			this.btn4.TabIndex = 17;
+			this.btn4.Text = "Exit";
+			this.btn4.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label5.Location = new System.Drawing.Point(230, 19);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(39, 20);
+			this.label5.TabIndex = 18;
+			this.label5.Text = "Key:";
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(275, 17);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(135, 21);
+			this.comboBox1.TabIndex = 19;
 			// 
 			// Form1
 			// 
@@ -166,6 +235,13 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.btn4);
+			this.Controls.Add(this.btn3);
+			this.Controls.Add(this.btn2);
+			this.Controls.Add(this.txt1);
+			this.Controls.Add(this.label4);
 			this.Controls.Add(this.chose);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.dataGridView1);
@@ -196,6 +272,13 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn col2;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox chose;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.TextBox txt1;
+		private System.Windows.Forms.Button btn2;
+		private System.Windows.Forms.Button btn3;
+		private System.Windows.Forms.Button btn4;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ComboBox comboBox1;
 	}
 }
 
